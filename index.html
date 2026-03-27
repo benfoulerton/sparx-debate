@@ -137,6 +137,18 @@
   .foot-logo{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:.05em;}
   .foot-logo span{color:var(--accent);}
   .foot-copy{font-family:'Space Mono',monospace;font-size:.52rem;color:var(--muted);letter-spacing:.14em;}
+
+  .slide-img-reveal {
+    border-radius: 10px;
+    transition: ease-in-out 0.06s;
+    width: 90%;
+  }
+
+  .slide-img-reveal:hover {
+    box-shadow: 10px 10px #ff542096;
+    transform: scale(1.06);
+    transform: translateY(-10px);
+  }
 </style>
 </head>
 <body>
@@ -184,12 +196,12 @@
     <div class="pres-text reveal">
       <h3>Presentation —<br>The Case</h3>
       <p>A comprehensive breakdown of why Sparx Maths is actively harming students' relationship with mathematics. Covering the data on student disengagement, the platform's punitive 100%-or-nothing design, and the systemic damage it causes.</p>
-      <a href="#" class="pdf-btn">View Presentation PDF →</a>
+      <a href="/resources/Presentation - The Case.pdf" class="pdf-btn">View Presentation PDF →</a>
     </div>
     <div class="slides-stack">
-      <img src="slides1.jpg" alt="Presentation slide" class="slide-img reveal">
-      <img src="slides2.jpg" alt="Presentation slide" class="slide-img reveal">
-      <img src="slides3.jpg" alt="Presentation slide" class="slide-img reveal">
+      <img src="/resources/trustpilot_overall.jpg" alt="Presentation slide" class="slide-img-reveal">
+      <img src="/resources/parent_1.jpg" alt="Presentation slide" class="slide-img-reveal">
+      <img src="/resources/review_summary.jpg" alt="Presentation slide" class="slide-img-reveal">
     </div>
   </div>
 
@@ -376,7 +388,7 @@
       <div class="pet-sigs" id="sig1">0</div>
       <p class="pet-sig-lbl">Verified signatures</p>
       <div class="pet-bar-bg"><div class="pet-bar" id="bar1"></div></div>
-      <a href="https://www.change.org/p/end-sparx-maths-for-good" class="pet-link">View Petition →</a>
+      <a target="_blank" href="https://www.change.org/p/end-sparx-maths-for-good" class="pet-link">View Petition →</a>
     </div>
 
     <div class="pet-card reveal" id="p2">
@@ -386,7 +398,7 @@
       <div class="pet-sigs" id="sig2">0</div>
       <p class="pet-sig-lbl">Verified signatures</p>
       <div class="pet-bar-bg"><div class="pet-bar" id="bar2"></div></div>
-      <a href="#" class="pet-link">View Petition →</a>
+      <a target="_blank" href="#" class="pet-link">View Petition →</a>
     </div>
 
     <div class="pet-card reveal" id="p3">
@@ -396,7 +408,7 @@
       <div class="pet-sigs" id="sig3">0</div>
       <p class="pet-sig-lbl">Verified signatures</p>
       <div class="pet-bar-bg"><div class="pet-bar" id="bar3"></div></div>
-      <a href="#" class="pet-link">View Petition →</a>
+      <a target="_blank" href="#" class="pet-link">View Petition →</a>
     </div>
 
   </div>
