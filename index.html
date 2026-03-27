@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Kids Hate Maths — The Sparx Case</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#080810;--surface:#0f0f18;--card:#13131e;--border:rgba(255,255,255,.06);
+    --accent:#ff3300;--accent2:#ffcc00;--text:#f0ede8;--muted:#666270;--muted2:#9995a0;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;cursor:none;}
+
+  #cur{position:fixed;width:10px;height:10px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:width .2s,height .2s;}
+  #cur-ring{position:fixed;width:32px;height:32px;border:1.5px solid rgba(255,51,0,.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:opacity .3s;}
+  body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.045'/%3E%3C/svg%3E");opacity:.38;}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:200;background:rgba(8,8,16,.88);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:.85rem 8vw;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+  .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.05em;}
+  .nav-logo span{color:var(--accent);}
+  .nav-links{display:flex;gap:2rem;list-style:none;}
+  .nav-links a{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted2);text-decoration:none;transition:color .2s;cursor:none;}
+  .nav-links a:hover{color:var(--accent);}
+
+  /* HERO */
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 8vw 8vh;position:relative;overflow:hidden;}
+  .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 55% 65% at 85% 40%,rgba(255,51,0,.13) 0%,transparent 65%),radial-gradient(ellipse 40% 50% at 15% 75%,rgba(255,204,0,.06) 0%,transparent 60%);pointer-events:none;}
+  .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,51,0,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,51,0,.03) 1px,transparent 1px);background-size:80px 80px;pointer-events:none;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 20%,transparent 100%);}
+  .hero-eyebrow{font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.28em;color:var(--accent);text-transform:uppercase;margin-bottom:1.5rem;opacity:0;animation:fadeUp .7s ease .1s forwards;}
+  .hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(4.5rem,14vw,12.5rem);line-height:.88;letter-spacing:-.01em;opacity:0;animation:fadeUp .8s ease .25s forwards;}
+  .hero-title .outline{-webkit-text-stroke:2px var(--text);color:transparent;display:block;}
+  .hero-title .solid{display:block;}
+  .hero-title .red{color:var(--accent);display:block;}
+  .hero-bottom{display:flex;align-items:flex-end;justify-content:space-between;margin-top:2.5rem;gap:2rem;flex-wrap:wrap;opacity:0;animation:fadeUp .9s ease .42s forwards;}
+  .hero-desc{font-size:.92rem;color:var(--muted2);max-width:420px;line-height:1.78;font-weight:300;}
+  .hero-stat{text-align:right;flex-shrink:0;}
+  .hero-stat-num{font-family:'Bebas Neue',sans-serif;font-size:5.5rem;line-height:1;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .hero-stat-label{font-family:'Space Mono',monospace;font-size:.58rem;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;line-height:1.6;}
+  .scroll-hint{position:absolute;bottom:1.75rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;font-family:'Space Mono',monospace;font-size:.52rem;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;opacity:0;animation:fadeUp 1s ease 1s forwards;}
+  .scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--muted),transparent);animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+
+  /* SECTIONS */
+  .section{padding:6rem 8vw;border-top:1px solid var(--border);scroll-margin-top:58px;}
+  .sec-label{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.28em;color:var(--accent);text-transform:uppercase;margin-bottom:3.5rem;display:flex;align-items:center;gap:1rem;}
+  .sec-label::after{content:'';height:1px;flex:1;background:rgba(255,51,0,.18);}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.8rem,7vw,6rem);line-height:.95;letter-spacing:.02em;margin-bottom:1rem;}
+  .sec-title .r{color:var(--accent);}
+  .sec-sub{font-size:.88rem;color:var(--muted2);max-width:540px;line-height:1.82;font-weight:300;margin-bottom:3.5rem;}
+
+  /* REVEAL */
+  .reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s cubic-bezier(.25,1,.5,1);}
+  .reveal.vis{opacity:1;transform:none;}
+  .reveal:nth-child(2){transition-delay:.07s}.reveal:nth-child(3){transition-delay:.14s}.reveal:nth-child(4){transition-delay:.21s}.reveal:nth-child(5){transition-delay:.28s}.reveal:nth-child(6){transition-delay:.35s}.reveal:nth-child(7){transition-delay:.42s}.reveal:nth-child(8){transition-delay:.49s}
+
+  /* PRESENTATION */
+  .pres-layout{display:grid;grid-template-columns:1fr 1.4fr;gap:3.5rem;align-items:start;margin-bottom:4rem;}
+  @media(max-width:760px){.pres-layout{grid-template-columns:1fr;}}
+  .pres-text h3{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:.03em;margin-bottom:1rem;line-height:1.1;}
+  .pres-text p{font-size:.88rem;color:var(--muted2);line-height:1.82;font-weight:300;margin-bottom:1.5rem;}
+  .pdf-btn{display:inline-flex;align-items:center;gap:.7rem;background:var(--accent);color:white;font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;padding:.85rem 1.75rem;transition:background .25s,transform .2s;cursor:none;}
+  .pdf-btn:hover{background:#ff5520;transform:translateX(4px);}
+  .slides-stack{display:flex;flex-direction:column;gap:1.25rem;}
+  .slide-img{width:100%;border:1px solid var(--border);display:block;transition:border-color .3s,transform .3s;}
+  .slide-img:hover{border-color:rgba(255,51,0,.35);transform:scale(1.015);}
+
+  /* VIDEO */
+  .video-wrap{max-width:780px;background:var(--card);border:1px solid var(--border);overflow:hidden;transition:border-color .3s,transform .3s;margin-top:.5rem;}
+  .video-wrap:hover{border-color:rgba(255,51,0,.3);transform:translateY(-3px);}
+  .video-embed{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;}
+  .video-embed iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0;}
+  .video-meta{padding:1.2rem 1.75rem 1.6rem;}
+  .video-tag{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.18em;color:var(--accent);text-transform:uppercase;margin-bottom:.35rem;}
+  .video-name{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.03em;line-height:1.1;}
+
+  /* RATING */
+  .rating-block{display:flex;align-items:center;gap:3rem;padding:2.5rem 3rem;background:var(--card);border:1px solid var(--border);max-width:600px;margin-bottom:3rem;flex-wrap:wrap;gap:2rem;}
+  .big-num{font-family:'Bebas Neue',sans-serif;font-size:7rem;line-height:1;color:var(--accent);}
+  .rating-right .r-label{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:.5rem;}
+  .stars-row{display:flex;gap:.2rem;margin-bottom:.6rem;}
+  .sf{color:var(--accent);font-size:1.3rem;} .se{color:#2a2a35;font-size:1.3rem;}
+  .r-from{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--muted2);line-height:1.6;}
+
+  /* SUMMARIES */
+  .summaries{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.25rem;margin-bottom:3.5rem;}
+  .sum-card{background:var(--card);border:1px solid var(--border);padding:1.85rem;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;}
+  .sum-card:hover{border-color:rgba(255,51,0,.28);transform:translateY(-3px);}
+  .sum-card::after{content:'AI SUMMARY';position:absolute;top:.7rem;right:.85rem;font-family:'Space Mono',monospace;font-size:.45rem;letter-spacing:.2em;color:var(--accent);opacity:.35;}
+  .sum-q{font-size:.83rem;line-height:1.82;color:var(--muted2);font-style:italic;font-weight:300;}
+  .sum-q strong{color:var(--text);font-style:normal;font-weight:500;}
+
+  /* REVIEW MOSAIC */
+  .reviews-mosaic{columns:2 320px;column-gap:1.25rem;}
+  .rev-card{break-inside:avoid;background:var(--card);border:1px solid var(--border);padding:1.6rem;margin-bottom:1.25rem;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;cursor:none;}
+  .rev-card:hover{border-color:rgba(255,51,0,.28);transform:translateY(-3px);}
+  .rev-card::before{content:'"';position:absolute;top:-1rem;left:1rem;font-family:'Bebas Neue',sans-serif;font-size:6rem;color:rgba(255,51,0,.07);line-height:1;pointer-events:none;}
+  .rev-head{display:flex;align-items:center;gap:.65rem;margin-bottom:.65rem;}
+  .rev-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:.6rem;font-weight:700;flex-shrink:0;}
+  .rev-name{font-weight:500;font-size:.82rem;line-height:1.2;}
+  .rev-meta{font-family:'Space Mono',monospace;font-size:.52rem;color:var(--muted);letter-spacing:.06em;}
+  .rev-stars{display:flex;gap:.18rem;margin-bottom:.6rem;}
+  .rs1{color:var(--accent);font-size:.8rem;} .rs0{color:#252530;font-size:.8rem;}
+  .rev-title{font-weight:500;font-size:.87rem;margin-bottom:.45rem;}
+  .rev-body{font-size:.8rem;line-height:1.78;color:var(--muted2);font-weight:300;}
+
+  /* PETITIONS */
+  .pet-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:3rem;}
+  @media(max-width:900px){.pet-grid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:580px){.pet-grid{grid-template-columns:1fr;}}
+  .pet-card{background:var(--card);border:1px solid var(--border);padding:2rem;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;cursor:none;}
+  .pet-card:hover{border-color:rgba(255,51,0,.35);transform:translateY(-4px);}
+  .pet-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 50% at 100% 0%,rgba(255,51,0,.07),transparent 70%);pointer-events:none;}
+  .pet-card.warn{border-color:rgba(255,204,0,.18);}
+  .pet-card.warn::before{background:radial-gradient(ellipse 50% 50% at 100% 0%,rgba(255,204,0,.07),transparent 70%);}
+  .pet-platform{font-family:'Space Mono',monospace;font-size:.52rem;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:.85rem;}
+  .pet-badge{display:inline-block;padding:.2rem .65rem;font-family:'Space Mono',monospace;font-size:.48rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.85rem;}
+  .pet-badge.live{background:rgba(255,51,0,.12);color:var(--accent);}
+  .pet-badge.rejected{background:rgba(255,204,0,.1);color:var(--accent2);}
+  .pet-heading{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;letter-spacing:.03em;line-height:1.05;margin-bottom:1.25rem;}
+  .pet-sigs{font-family:'Bebas Neue',sans-serif;font-size:4rem;line-height:1;color:var(--accent);margin-bottom:.2rem;}
+  .pet-card.warn .pet-sigs{color:var(--accent2);}
+  .pet-sig-lbl{font-family:'Space Mono',monospace;font-size:.55rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.25rem;}
+  .pet-bar-bg{height:3px;background:rgba(255,255,255,.06);margin-bottom:1.5rem;overflow:hidden;}
+  .pet-bar{height:100%;background:linear-gradient(to right,var(--accent),var(--accent2));width:0;transition:width 1.8s cubic-bezier(.25,1,.5,1);}
+  .pet-card.warn .pet-bar{background:linear-gradient(to right,var(--accent2),#ff9900);}
+  .pet-link{display:inline-flex;align-items:center;gap:.5rem;font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);text-decoration:none;transition:gap .25s;cursor:none;}
+  .pet-link:hover{gap:.85rem;}
+  .pet-card.warn .pet-link{color:var(--accent2);}
+  .pet-rejected-note{margin-top:1.25rem;padding:1rem;background:rgba(255,204,0,.06);border:1px solid rgba(255,204,0,.15);font-size:.78rem;color:var(--muted2);line-height:1.7;font-weight:300;}
+
+  footer{padding:3rem 8vw;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;}
+  .foot-logo{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:.05em;}
+  .foot-logo span{color:var(--accent);}
+  .foot-copy{font-family:'Space Mono',monospace;font-size:.52rem;color:var(--muted);letter-spacing:.14em;}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<nav>
+  <div class="nav-logo">Why Kids Hate <span>Maths</span></div>
+  <ul class="nav-links">
+    <li><a href="#presentation">Presentation</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#petitions">Petitions</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <p class="hero-eyebrow">Student Research Project · Warwickshire · 2026</p>
+  <h1 class="hero-title">
+    <span class="outline">Why</span>
+    <span class="solid">Kids</span>
+    <span class="red">Hate</span>
+    <span class="solid">Maths</span>
+  </h1>
+  <div class="hero-bottom">
+    <p class="hero-desc">A deep dive into how Sparx Maths is systematically destroying students' relationship with mathematics — backed by real reviews, petitions, and the data that proves it.</p>
+    <div class="hero-stat">
+      <div class="hero-stat-num">1.1</div>
+      <div class="hero-stat-label">Trustpilot score<br>from 1,000+ reviews</div>
+    </div>
+  </div>
+  <div class="scroll-hint"><div class="scroll-line"></div>scroll</div>
+</section>
+
+<!-- ═══ SECTION 1: PRESENTATION ═══ -->
+<section class="section" id="presentation">
+  <div class="sec-label">01 — The Case</div>
+  <h2 class="sec-title">Presentation<br>&amp; <span class="r">Video</span></h2>
+  <p class="sec-sub">The full argument laid out — the psychology of homework anxiety, the punitive design of Sparx, and what should replace it.</p>
+
+  <div class="pres-layout">
+    <div class="pres-text reveal">
+      <h3>Presentation —<br>The Case</h3>
+      <p>A comprehensive breakdown of why Sparx Maths is actively harming students' relationship with mathematics. Covering the data on student disengagement, the platform's punitive 100%-or-nothing design, and the systemic damage it causes.</p>
+      <a href="#" class="pdf-btn">View Presentation PDF →</a>
+    </div>
+    <div class="slides-stack">
+      <img src="slides1.jpg" alt="Presentation slide" class="slide-img reveal">
+      <img src="slides2.jpg" alt="Presentation slide" class="slide-img reveal">
+      <img src="slides3.jpg" alt="Presentation slide" class="slide-img reveal">
+    </div>
+  </div>
+
+  <div class="video-wrap reveal">
+    <div class="video-embed">
+      <iframe src="https://www.youtube.com/embed/wbJ3pO63kOc"
+        title="Kid's Hate Maths Now..."
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+    <div class="video-meta">
+      <p class="video-tag">YouTube · Featured Video</p>
+      <h3 class="video-name">Kid's Hate Maths Now...</h3>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 2: REVIEWS ═══ -->
+<section class="section" id="reviews">
+  <div class="sec-label">02 — The Evidence</div>
+  <h2 class="sec-title">What Students<br><span class="r">Actually Think</span></h2>
+  <p class="sec-sub">Sparx Maths holds a 1.1 out of 5 on Trustpilot from over 1,000 reviews. Nearly every single one is 1 star. Here's the full picture.</p>
+
+  <div class="rating-block reveal">
+    <div class="big-num">1.1</div>
+    <div class="rating-right">
+      <p class="r-label">Trustpilot Rating</p>
+      <div class="stars-row"><span class="sf">★</span><span class="se">★</span><span class="se">★</span><span class="se">★</span><span class="se">★</span></div>
+      <p class="r-from">Rated "Bad" · 1,000+ reviews<br>The 1-star bar is almost fully red. Every other bar barely exists.</p>
+    </div>
+  </div>
+
+  <div class="sec-label" style="margin-bottom:1.5rem;">Trustpilot AI Review Summaries</div>
+  <div class="summaries">
+    <div class="sum-card reveal">
+      <p class="sum-q">Most reviewers were let down by their experience overall. Many found it <strong>frustrating and tedious</strong>, often leading to <strong>anger and stress</strong>. The AI system was ineffective, providing inadequate feedback and sometimes presenting <strong>incorrect answers or getting stuck in loops.</strong></p>
+    </div>
+    <div class="sum-card reveal">
+      <p class="sum-q">Reviewers describe it as a <strong>"punishment simulator"</strong> and a <strong>"pedagogical disaster,"</strong> with some stating it taught them <strong>"suffering" rather than learning.</strong> Some questions were unsolvable even with external help. Mental health issues and even damage to devices reported.</p>
+    </div>
+    <div class="sum-card reveal">
+      <p class="sum-q">The system <strong>punishes struggle and rewards speed</strong>, making learning a <strong>"soul-crushing, bureaucratic nightmare."</strong> An unintuitive interface with clashing neon colors, useless videos, and endless loops of failure — described as <strong>"joy-destroying educational software."</strong></p>
+    </div>
+  </div>
+
+  <div class="sec-label" style="margin-bottom:2rem;">Individual Reviews</div>
+  <div class="reviews-mosaic">
+
+    <div class="rev-card reveal">
+      <div class="rev-head">
+        <div class="rev-av" style="background:#1e2e1e;color:#5db85d;">JA</div>
+        <div><div class="rev-name">Jakob</div><div class="rev-meta">GB · 26 March 2026</div></div>
+      </div>
+      <div class="rev-stars"><span class="rs1">★</span><span class="rs0">★★★★</span></div>
+      <p class="rev-title">This slowly takes the life out of you</p>
+      <p class="rev-body">It's not just "bad homework." One small mistake and suddenly you're not moving forward anymore — repeating, going over the same ground again, watching the same explanations, trapped in a loop you didn't choose. The worst part is what it does to how you see maths. I used to not mind it. Now it just feels like a constant weight I associate with being tired, frustrated, and completely drained. No satisfaction. No sense of progress. Just exhaustion. I wouldn't wish this on anyone who actually wants to enjoy learning.</p>
+    </div>
+
+    <div class="rev-card reveal">
+      <div class="rev-head">
+        <div class="rev-av" style="background:#2e1e1e;color:#c05050;">WG</div>
+        <div><div class="rev-name">William Gillespie</div><div class="rev-meta">GB · 26 March 2026</div></div>
+      </div>
+      <div class="rev-stars"><span class="rs1">★</span><span class="rs0">★★★★</span></div>
+      <p class="rev-title">How Sparx is destroying learning for children</p>
+      <p class="rev-body">If 29 were answered correctly and 1 wrong, the entire assignment is marked incomplete. Sparx has become the face of stress for students under 16. It's embodying the hyperbolic term of how 'school is hell'. Now that students associate Sparx with stress, anxiety and distrust, its branch to English and Science will make all core subjects even more despised, leading to a drop in student grades.</p>
+    </div>
+
+    <div class="rev-card reveal">
+      <div class="rev-head">
+        <div class="rev-av" style="background:#1e1e2e;color:#5050c0;">IC</div>
+        <div><div class="rev-name">Iana Callaghan</div><div class="rev-meta">GB · 2 hours ago</div></div>
+      </div>
+      <div class="rev-stars"><span class="rs1">★</span><span class="rs0">★★★★</span></div>
+      <p class="rev-title">Sparx is terrible</p>
+      <p class="rev-body">I would put this as a 0 but can't. As a Year 10 it really shouldn't be used. After doing Sparx I'm drained and have no want to do any other homework. You have to get 100 percent otherwise it's late. They don't give us help when we answer wrong, they just say watch the video. The video doesn't even help. Sometimes we get the questions right and the answer is wrong. My mom is a teacher with a maths degree and she agrees Sparx is absolutely stupid and a waste of time.</p>
+    </div>
+
+    <div class="rev-card reveal">
+      <div class="rev-head">
+        <div class="rev-av" style="background:#2e221e;color:#c08050;">WL</div>
+        <div><div class="rev-name">William Loraine</div><div class="rev-meta">GB · 27 March 2026</div></div>
+      </div>
+      <div class="rev-stars"><span class="rs1">★</span><span class="rs0">★★★★</span></div>
+      <p class="rev-title">If you're a school, use a different platform.</p>
+      <p class="rev-body">I actually quite enjoy maths. Sparx Maths ruins ALL enjoyment I had of the subject. The system treats someone doing no homework at all the same as someone who did the entire thing but got 1 or 2 wrong, and the questions are so repetitive it makes it pointless to continue doing each chunk past the first 2 or 3 questions.</p>
+    </div>
+
+    <div class="rev-card reveal">
+      <div class="rev-head">
+        <div class="rev-av" style="background:#1e2e2e;color:#50c0b0;">PA</div>
+        <div><div class="rev-name">Pancake</div><div class="rev-meta">NL · 26 March 2026</div></div>
+      </div>
+      <div class="rev-stars"><span class="rs1">★</span><span class="rs0">★★★★</span></div>
+      <p class="rev-title">Quite frankly this website is awful.</p>
+      <p class="rev-body">One star is too much for this hell spawn. Hegarty maths was infinitely better. Instead of getting support when you don't understand, you get a detention and are publicly humiliated in front of your whole class for nothing. I would much rather have my eyes ripped out and served to me in hot sauce than touch this garbage pile of an app ever again.</p>
+    </div>
+
+    <div class="rev-card reveal">
+      <div class="rev-head">
+        <div class="rev-av" style="background:#2e1e2e;color:#c050c0;">LC</div>
+        <div><div class="rev-name">Lilly Clarke</div><div class="rev-meta">GB · 26 March 2026</div></div>
+      </div>
+      <div class="rev-stars"><span class="rs1">★</span><span class="rs0">★★★★</span></div>
+      <p class="rev-title">Sparx maths drains the fun in learning</p>
+      <p class="rev-body">It sees a child doing 99 percent and a child doing 0 as equal. I was planning on taking A level maths as I used to enjoy it and was quite good, but now I'm counting down the days until I can finally stop. I know some of my friends literally have anxiety attacks and are in tears due to a homework app. That alone should show that it sucks.</p>
+    </div>
+
+    <div class="rev-card reveal">
+      <div class="rev-head">
+        <div class="rev-av" style="background:#2e2a1e;color:#c0a850;">LO</div>
+        <div><div class="rev-name">Logan</div><div class="rev-meta">GB · 26 March 2026</div></div>
+      </div>
+      <div class="rev-stars"><span class="rs1">★</span><span class="rs0">★★★★</span></div>
+      <p class="rev-title">Genuinely worrying.</p>
+      <p class="rev-body">My son cries almost every time he uses Sparx maths. Last week he came to me, absolutely sobbing his eyes out for 30 minutes all because of Sparx. I sat down with him and tried the questions myself — it was genuinely so difficult. You have to get every single answer correct or else his school will make him get an after school. "It's too hard." I know, I hate Sparx too, son. Terrible.</p>
+    </div>
+
+    <div class="rev-card reveal">
+      <div class="rev-head">
+        <div class="rev-av" style="background:#1e2828;color:#50a0a0;">DC</div>
+        <div><div class="rev-name">David Cardwell</div><div class="rev-meta">GB · 26 March 2026</div></div>
+      </div>
+      <div class="rev-stars"><span class="rs1">★</span><span class="rs0">★★★★</span></div>
+      <p class="rev-title">Would rate a 0 if I could</p>
+      <p class="rev-body">I used to like maths — now it feels more like a chore. WHY do we have to get everything 100% CORRECT? You learn from mistakes. The people on the videos sound like they were being threatened. They're USELESS as the terms in the video are often different to the question. And don't even get me started on the hell that is BOOKWORK CHECKS.</p>
+    </div>
+
+    <div class="rev-card reveal">
+      <div class="rev-head">
+        <div class="rev-av" style="background:#1e2420;color:#60b870;">AP</div>
+        <div><div class="rev-name">Alex Pereira</div><div class="rev-meta">GB · 18 Jan 2026</div></div>
+      </div>
+      <div class="rev-stars"><span class="rs1">★</span><span class="rs0">★★★★</span></div>
+      <p class="rev-title">i have this as homework.</p>
+      <p class="rev-body">This is the worst website my school uses. The so-called personalised homework is just the simplest version of ChatGPT spitting out questions that are easy for me until the bot decides that a short question should last up to 20 MINUTES. Do not use this website.</p>
+    </div>
+
+    <div class="rev-card reveal">
+      <div class="rev-head">
+        <div class="rev-av" style="background:#28201e;color:#b86050;">HM</div>
+        <div><div class="rev-name">help me</div><div class="rev-meta">GB · 5 March 2026</div></div>
+      </div>
+      <div class="rev-stars"><span class="rs1">★</span><span class="rs0">★★★★</span></div>
+      <p class="rev-title">Sparx Learning is honestly just painful...</p>
+      <p class="rev-body">It turns simple maths practice into something way more complicated and time-consuming than it needs to be. You end up stuck doing loads of questions that don't even feel useful, just repetitive. The explanations aren't great either — when you get something wrong it doesn't really explain it properly, just kind of repeats stuff and expects you to get it. Overall it's frustrating, slow, and makes learning feel like a chore.</p>
+    </div>
+
+    <div class="rev-card reveal">
+      <div class="rev-head">
+        <div class="rev-av" style="background:#201e28;color:#8060c0;">MA</div>
+        <div><div class="rev-name">Maddie Atherton</div><div class="rev-meta">GB · 27 March 2026</div></div>
+      </div>
+      <div class="rev-stars"><span class="rs1">★</span><span class="rs0">★★★★</span></div>
+      <p class="rev-title">its the best thing to depress yourself</p>
+      <p class="rev-body">Five stars for being the most reliable depression machine in the British school system. Genuinely efficient at ruining your evening.</p>
+    </div>
+
+    <div class="rev-card reveal">
+      <div class="rev-head">
+        <div class="rev-av" style="background:#1e2820;color:#50c070;">GA</div>
+        <div><div class="rev-name">Gabb</div><div class="rev-meta">GB · 27 March 2026</div></div>
+      </div>
+      <div class="rev-stars"><span class="rs1">★</span><span class="rs0">★★★★</span></div>
+      <p class="rev-title">Id give it lower if i could</p>
+      <p class="rev-body">I can't believe I have to sit here on a Tuesday night working on this ridiculous website called Sparx when I could be doing anything else with my life. Every question is the same boring, repetitive stuff dressed up in a slightly different font. I'm running on three hours of sleep, a cereal bar I found in my bag, and pure, unfiltered rage, and you dare to tell me I'm not trying hard enough. HOORAY.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ SECTION 3: PETITIONS ═══ -->
+<section class="section" id="petitions">
+  <div class="sec-label">03 — The Movement</div>
+  <h2 class="sec-title">The <span class="r">Petitions</span></h2>
+  <p class="sec-sub">Students, parents and teachers have had enough. Multiple petitions calling to end Sparx Maths have gathered thousands of signatures — one even reached the UK Parliament.</p>
+
+  <div class="pet-grid">
+
+    <div class="pet-card reveal" id="p1">
+      <p class="pet-platform">Change.org</p>
+      <span class="pet-badge live">Live</span>
+      <h3 class="pet-heading">END SPARX MATHS FOR GOOD</h3>
+      <div class="pet-sigs" id="sig1">0</div>
+      <p class="pet-sig-lbl">Verified signatures</p>
+      <div class="pet-bar-bg"><div class="pet-bar" id="bar1"></div></div>
+      <a href="https://www.change.org/p/end-sparx-maths-for-good" class="pet-link">View Petition →</a>
+    </div>
+
+    <div class="pet-card reveal" id="p2">
+      <p class="pet-platform">Change.org</p>
+      <span class="pet-badge live">Live</span>
+      <h3 class="pet-heading">ABOLISH SPARX MATHS</h3>
+      <div class="pet-sigs" id="sig2">0</div>
+      <p class="pet-sig-lbl">Verified signatures</p>
+      <div class="pet-bar-bg"><div class="pet-bar" id="bar2"></div></div>
+      <a href="#" class="pet-link">View Petition →</a>
+    </div>
+
+    <div class="pet-card reveal" id="p3">
+      <p class="pet-platform">Change.org</p>
+      <span class="pet-badge live">Live</span>
+      <h3 class="pet-heading">Ban Sparx Maths from every school in the UK</h3>
+      <div class="pet-sigs" id="sig3">0</div>
+      <p class="pet-sig-lbl">Verified signatures</p>
+      <div class="pet-bar-bg"><div class="pet-bar" id="bar3"></div></div>
+      <a href="#" class="pet-link">View Petition →</a>
+    </div>
+
+  </div>
+
+  <!-- Rejected petition -->
+  <div class="pet-card warn reveal" style="max-width:680px;">
+    <p class="pet-platform">UK Government &amp; Parliament</p>
+    <span class="pet-badge rejected">Rejected</span>
+    <h3 class="pet-heading">Stop the use of Sparx homework in UK schools.</h3>
+    <p style="font-size:.82rem;color:var(--muted2);line-height:1.75;margin-bottom:1.25rem;font-weight:300;">Submitted 27 May 2022. Sparx creates a stressful environment for secondary school students. We want Sparx to be banned in all UK secondary schools.</p>
+    <div class="pet-rejected-note">
+      <strong style="color:var(--accent2);">Why was this petition rejected?</strong><br>
+      It's about something that the UK Government or Parliament is not directly responsible for. It's a matter for individual schools which homework and educational tools they use. The Government suggested starting a petition asking them to <em>review schools' usage of online educational tools</em> such as Sparx Maths instead.
+    </div>
+  </div>
+
+  <div style="margin-top:3rem;padding:2rem 2.5rem;background:var(--card);border:1px solid var(--border);max-width:680px;" class="reveal">
+    <p style="font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.18em;color:var(--accent);text-transform:uppercase;margin-bottom:1rem;">Total Signatures Across All Petitions</p>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:5rem;line-height:1;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" id="totalSigs">0</div>
+    <p style="font-family:'Space Mono',monospace;font-size:.6rem;color:var(--muted);letter-spacing:.12em;margin-top:.5rem;">people have signed a petition against Sparx Maths</p>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-logo">Why Kids Hate <span>Maths</span></div>
+  <p class="foot-copy">Student Research Project · Warwickshire · 2026</p>
+</footer>
+
+<script>
+// Cursor
+const cur = document.getElementById('cur');
+const ring = document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => {
+  mx=e.clientX; my=e.clientY;
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+});
+(function raf(){
+  rx+=(mx-rx)*.13; ry+=(my-ry)*.13;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(raf);
+})();
+document.querySelectorAll('a,button,.rev-card,.pet-card,.slide-img,.video-wrap,.sum-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='18px';cur.style.height='18px';ring.style.opacity='0';});
+  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';ring.style.opacity='1';});
+});
+
+// Reveal on scroll
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target);} });
+},{threshold:.12});
+reveals.forEach(el=>io.observe(el));
+
+// Petition counters
+const pets=[
+  {sigEl:'sig1',barEl:'bar1',target:11022,max:15000},
+  {sigEl:'sig2',barEl:'bar2',target:1187,max:2000},
+  {sigEl:'sig3',barEl:'bar3',target:492,max:1000},
+];
+const totalTarget=11022+1187+492;
+let petAnimated=false;
+
+const petSection=document.getElementById('p1');
+const petIO=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting&&!petAnimated){
+      petAnimated=true;
+      const dur=2000,start=performance.now();
+      function tick(now){
+        const prog=Math.min((now-start)/dur,1);
+        const ease=1-Math.pow(1-prog,3);
+        pets.forEach(p=>{
+          document.getElementById(p.sigEl).textContent=Math.round(ease*p.target).toLocaleString();
+          document.getElementById(p.barEl).style.width=(ease*(p.target/p.max)*100)+'%';
+        });
+        document.getElementById('totalSigs').textContent=Math.round(ease*totalTarget).toLocaleString();
+        if(prog<1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+  });
+},{threshold:.3});
+if(petSection) petIO.observe(petSection);
+</script>
+</body>
+</html>
