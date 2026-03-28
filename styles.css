@@ -537,25 +537,42 @@ nav {
 
 /* REVIEW MOSAIC */
 .reviews-mosaic {
-  columns: 2 320px;
-  column-gap: 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.25rem;
 }
 .rev-card {
-  break-inside: avoid;
   background: var(--card);
   border: 1px solid var(--border);
   padding: 1.6rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0;
   position: relative;
   overflow: hidden;
-  transition:
-    border-color 0.3s,
-    transform 0.3s;
+
+  /* floaty hover effect */
+  transition: ease-in-out 1s;
+              box-shadow 0.35s ease,
+              border-color 1s ease;
   cursor: none;
+  will-change: transform;
 }
+
 .rev-card:hover {
-  border-color: rgba(255, 51, 0, 0.28);
-  transform: translateY(-3px);
+  transform: translate3d(0, -8px, 0) scale(1.03) rotateZ(-0.5deg);
+  border-color: rgba(255, 51, 0, 0.35);
+  box-shadow: 0 16px 32px rgba(255, 51, 0, 0.12);
+}
+
+/* .reveal + .vis just handles fade-in, not hover */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.vis {
+  opacity: 1;
+  transform: translateY(0);
 }
 .rev-card::before {
   content: '"';
@@ -796,12 +813,16 @@ footer {
 
 .slide-img-reveal {
   border-radius: 10px;
-  transition: ease-in-out 0.3s;
-  width: 90%;
+  transition: ease-in-out 0.2s;
+  width: 50%;
+ 
 }
 
 .slide-img-reveal:hover {
   box-shadow: 10px 10px #ff542096;
   transform: scale(1.06);
   transform: translateY(-10px);
+  
 }
+
+
