@@ -796,7 +796,7 @@ footer {
 
 .slide-img-reveal {
   border-radius: 10px;
-  transition: ease-in-out 0.06s;
+  transition: ease-in-out 0.3s;
   width: 90%;
 }
 
